@@ -13,11 +13,10 @@ class AkkademyDbSpec extends FunSpecLike with Matchers {
   implicit val timeout = Timeout(5 seconds)
 
   describe("akkademyDb") {
-    describe("given SetRequest") {
-      it("should place key/value into map") {
+    describe("given SetRequest"){
+      it("should place key/value into map"){
         val actorRef = TestActorRef(new AkkademyDb)
-        //tell
-        actorRef ! SetRequest("key", "value")
+          actorRef ! SetRequest("key", "value")
 
         val akkademyDb = actorRef.underlyingActor
         akkademyDb.map.get("key") should equal(Some("value"))

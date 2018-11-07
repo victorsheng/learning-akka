@@ -2,13 +2,11 @@ name := """akkademy-db"""
 
 version := "0.0.1-SNAPSHOT"
 
-scalaVersion := "2.12.7"
+scalaVersion := "2.11.1"
 
 libraryDependencies ++= Seq(
-  // https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor
-  "com.typesafe.akka" %% "akka-actor" % "2.5.6",
-"com.typesafe.akka" %% "akka-testkit" % "2.5.6" % "test",
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
-
+  "com.typesafe.akka" %% "akka-actor" % "2.3.3",
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.6" % "test",
+  "org.scalatest" %% "scalatest" % "2.1.6" % "test"
 )
 
