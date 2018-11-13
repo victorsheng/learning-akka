@@ -12,6 +12,7 @@ class SClientIntegrationSpec extends FunSpecLike with Matchers {
       it("should set a value"){
         client.set("123", new Integer(123))
         val futureResult = client.get("123")
+        //阻塞10s
         val result = Await.result(futureResult, 10 seconds)
         result should equal(123)
       }
