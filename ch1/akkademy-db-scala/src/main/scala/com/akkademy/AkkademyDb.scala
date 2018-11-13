@@ -7,7 +7,9 @@ import com.akkademy.messages.SetRequest
 import scala.collection.mutable.HashMap
 
 class AkkademyDb extends Actor {
+  //成员变量
   val map = new HashMap[String, String]
+  //日志
   val log = Logging(context.system, this)
 
   /**
