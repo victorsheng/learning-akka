@@ -3,7 +3,7 @@ package com.akkademy
 import akka.actor.ActorSystem
 import akka.testkit.TestActorRef
 import akka.util.Timeout
-import com.akkademy.messages.SetRequest
+import com.akkademy.messages.{GetRequest, SetRequest}
 import org.scalatest.{FunSpecLike, Matchers}
 
 import scala.concurrent.duration._
@@ -31,6 +31,19 @@ class AkkademyDbSpec extends FunSpecLike with Matchers {
 
           val akkademyDb = actorRef.underlyingActor
           akkademyDb.map.get("key2") should equal(None)
+        }
+      }
+
+      describe(" my own test") {
+        it("a") {
+          val actorRef = TestActorRef(new AkkademyDb)
+          //tell
+          actorRef ! SetRequest("key", "hehe")
+          actorRef ! "UFO"
+
+          actorRef ! GetRequest("key")
+
+          actorRef ! GetRequest("key2")
         }
       }
     }
