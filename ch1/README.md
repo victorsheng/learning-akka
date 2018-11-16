@@ -1,5 +1,6 @@
 CHAPTER1
 ========
+这个章节展示了actor如果通过定义receive函数,实现了一个简单的独立的actor,该actor可以跟去期望做出不同的相应
 
 Inventory
 ---------

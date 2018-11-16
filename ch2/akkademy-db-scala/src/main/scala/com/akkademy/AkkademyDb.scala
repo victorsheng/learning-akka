@@ -19,6 +19,7 @@ class AkkademyDb extends Actor {
       sender() ! Status.Success
     case GetRequest(key) =>
       log.info("received GetRequest - key: {}", key)
+      //option对象
       val response: Option[Object] = map.get(key)
       response match {
         //存在值
