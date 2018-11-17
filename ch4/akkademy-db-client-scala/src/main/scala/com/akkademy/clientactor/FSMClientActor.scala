@@ -5,7 +5,7 @@ import com.akkademy.clientactor.StateContainerTypes.RequestQueue
 import com.akkademy.messages
 import com.akkademy.messages._
 
-//sealed: 不能在类定义的文件之外定义任何新的子类
+//sealed: 不能在类定义的文件之外定义任何新的子类,case如果少处理了,编译时会提示,厉害!
 sealed trait State
 
 case object Disconnected extends State
