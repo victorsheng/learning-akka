@@ -22,7 +22,8 @@ class AkkademyDb extends Actor {
       //option对象
       val response: Option[Object] = map.get(key)
       response match {
-        //存在值
+        //存在值,发送获取到的值
+        //!  Sends a one-way asynchronous message
         case Some(x) => sender() ! x
         //不存在值
         case None => sender() ! Status.Failure(new KeyNotFoundException(key))
