@@ -5,24 +5,29 @@ import com.akkademy.clientactor.StateContainerTypes.RequestQueue
 import com.akkademy.messages
 import com.akkademy.messages._
 
+//sealed: 不能在类定义的文件之外定义任何新的子类
 sealed trait State
+
 case object Disconnected extends State
+
 case object Connected extends State
+
 case object ConnectedAndPending extends State
 
 case object Flush
+
 case object ConnectedMsg
 
 object StateContainerTypes {
   type RequestQueue = List[Request]
 }
 
-class FSMClientActor(address: String) extends FSM[State, RequestQueue]{
+class FSMClientActor(address: String) extends FSM[State, RequestQueue] {
   private val remoteDb = context.system.actorSelection(address)
 
   startWith(Disconnected, List.empty[Request])
 
-  when(Disconnected){
+  when(Disconnected) {
     case Event(_: messages.Connected, container: RequestQueue) => //If we get back a ping from db, change state
       if (container.headOption.isEmpty)
         goto(Connected)
@@ -36,17 +41,17 @@ class FSMClientActor(address: String) extends FSM[State, RequestQueue]{
       stay()
   }
 
-  when (Connected) {
+  when(Connected) {
     case Event(x: Request, container: RequestQueue) =>
-      goto(ConnectedAndPending) using(container :+ x)
+      goto(ConnectedAndPending) using (container :+ x)
   }
 
-  when (ConnectedAndPending) {
+  when(ConnectedAndPending) {
     case Event(Flush, container) =>
       remoteDb ! container;
       goto(Connected) using Nil
     case Event(x: Request, container: RequestQueue) =>
-      stay using(container :+ x)
+      stay using (container :+ x)
   }
 
   initialize()

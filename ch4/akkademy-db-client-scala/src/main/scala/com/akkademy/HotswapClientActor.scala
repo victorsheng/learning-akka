@@ -11,6 +11,8 @@ import com.akkademy.messages.{Connected, Request}
 class HotswapClientActor(address: String) extends Actor with Stash {
   private val remoteDb = context.system.actorSelection(address)
 
+
+  //离线处理
   override def receive = {
     case x: Request =>  //can't handle until we know remote system is responding
       remoteDb ! new Connected //see if the remote actor is up
@@ -20,10 +22,12 @@ class HotswapClientActor(address: String) extends Actor with Stash {
       context.become(online)
   }
 
+  //在线处理
   def online: Receive = {
     case x: Disconnected =>
       context.unbecome()
     case x: Request =>
+      //本地转发
       remoteDb forward x //forward is used to preserve sender
   }
 }

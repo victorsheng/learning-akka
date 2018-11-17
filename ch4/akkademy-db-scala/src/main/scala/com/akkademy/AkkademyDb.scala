@@ -11,6 +11,7 @@ class AkkademyDb extends Actor {
 
   override def receive = {
     case x: messages.Connected =>
+      //发来啥,返回啥
       sender() ! x
     case x: List[_] =>
       x.foreach{
