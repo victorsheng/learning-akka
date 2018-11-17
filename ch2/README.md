@@ -1,5 +1,40 @@
 CHAPTER2
 ========
+# 理解Futrue和Promise
+##  2.5.1成功
+onSuccess
+##  2.5.2转换
+map 
+
+##  2.5.3异步转换
+flatMap
+把future连起来了
+其中任何一个调用失败都会导致整个Future的失败
+
+##  2.5.4失败处理
+onFailure 
+
+##  2.5.5从失败中恢复
+recover
+类似于降级
+
+##  2.5.6异步地从失败中恢复
+recoverWith
+
+##  2.5.7链式操作
+在链式操作的结尾再收集错误
+
+##  2.5.8组合Future
+for推导式
+是flatMap的一个语法糖
+
+##  2.5.9处理Future列表
+转化:List[Future]成Future[List]
+
+##  2.5.10速查表
+
+
+
 This chapter demonstrates using akka to talk over the network to remote services. It extends on the simple examples from chapter 1, and builds a second component to talk to the code we had previously built over the network.
 
 Inventory

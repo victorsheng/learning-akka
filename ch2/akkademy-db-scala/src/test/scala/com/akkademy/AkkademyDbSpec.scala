@@ -6,8 +6,8 @@ import akka.testkit.TestActorRef
 import akka.util.Timeout
 import com.akkademy.messages.SetRequest
 import org.scalatest.{FunSpecLike, Matchers}
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class AkkademyDbSpec extends FunSpecLike with Matchers {
@@ -35,16 +35,23 @@ class AkkademyDbSpec extends FunSpecLike with Matchers {
           case body => body should equal("fedcba")
         }
       }
-      it(" int not string "){
+      it(" int not string ") {
+        import scala.concurrent.ExecutionContext.Implicits.global
         val actorRef = TestActorRef(new com.akkademy.RevertString)
         val future = actorRef ? 123
         future onComplete {
           case body => body should equal("unkown message")
         }
       }
+      it(" int not string ") {
+        val actorRef = TestActorRef(new com.akkademy.RevertString)
+        val future = actorRef ? 123
+//        future.map(x => println(x))
+        val result = Await.result(future.mapTo[String], 1 second);
+        result should equal("unkown message")
+      }
     }
   }
 
 
 }
-
