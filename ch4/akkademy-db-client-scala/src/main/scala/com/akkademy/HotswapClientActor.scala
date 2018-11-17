@@ -18,12 +18,14 @@ class HotswapClientActor(address: String) extends Actor with Stash {
       remoteDb ! new Connected //see if the remote actor is up
       stash() //stash message for later
     case _: Connected => // Okay to start processing messages.
+      //收到了响应,就说明连接上了
       unstashAll()
       context.become(online)
   }
 
   //在线处理
   def online: Receive = {
+    //收到下线指令 什么时候会发出来
     case x: Disconnected =>
       context.unbecome()
     case x: Request =>

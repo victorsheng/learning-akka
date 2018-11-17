@@ -25,11 +25,14 @@ object StateContainerTypes {
 class FSMClientActor(address: String) extends FSM[State, RequestQueue] {
   private val remoteDb = context.system.actorSelection(address)
 
+  //起始状态
   startWith(Disconnected, List.empty[Request])
 
   when(Disconnected) {
     case Event(_: messages.Connected, container: RequestQueue) => //If we get back a ping from db, change state
+      //默认就会转在线
       if (container.headOption.isEmpty)
+        //转为在线
         goto(Connected)
       else
         goto(ConnectedAndPending)
@@ -43,16 +46,22 @@ class FSMClientActor(address: String) extends FSM[State, RequestQueue] {
 
   when(Connected) {
     case Event(x: Request, container: RequestQueue) =>
+      //1.转在线+有内容状态
+      //2.添加到队列中
       goto(ConnectedAndPending) using (container :+ x)
   }
 
   when(ConnectedAndPending) {
     case Event(Flush, container) =>
+      //接受Flush后,会发送
       remoteDb ! container;
+      //发送完内容,再次转为离线
       goto(Connected) using Nil
     case Event(x: Request, container: RequestQueue) =>
+      //保持ConnectedAndPending状态
       stay using (container :+ x)
   }
 
+  //开始启动
   initialize()
 }
