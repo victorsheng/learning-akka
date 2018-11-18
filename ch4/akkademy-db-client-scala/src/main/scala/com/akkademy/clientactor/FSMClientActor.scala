@@ -53,9 +53,9 @@ class FSMClientActor(address: String) extends FSM[State, RequestQueue] {
 
   when(ConnectedAndPending) {
     case Event(Flush, container) =>
-      //接受Flush后,会发送
+      //接受Flush后,会发送 List请求,包括了get和pset
       remoteDb ! container;
-      //发送完内容,再次转为离线
+      //发送完内容,再次转为离线,并且将容器内容清空
       goto(Connected) using Nil
     case Event(x: Request, container: RequestQueue) =>
       //保持ConnectedAndPending状态

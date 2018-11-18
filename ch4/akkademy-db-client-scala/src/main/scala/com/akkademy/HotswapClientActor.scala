@@ -25,7 +25,7 @@ class HotswapClientActor(address: String) extends Actor with Stash {
 
   //在线处理
   def online: Receive = {
-    //收到下线指令 什么时候会发出来
+    //收到下线指令
     case x: Disconnected =>
       context.unbecome()
     case x: Request =>
