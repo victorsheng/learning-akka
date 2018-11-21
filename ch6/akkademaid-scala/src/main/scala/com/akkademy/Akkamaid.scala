@@ -1,7 +1,7 @@
 package com.akkademy
 
 import akka.actor.{ActorSystem, Props}
-import akka.contrib.pattern.ClusterReceptionistExtension
+import akka.cluster.client.ClusterClientReceptionist
 import akka.routing.BalancingPool
 
 object Main extends App {
@@ -10,6 +10,6 @@ object Main extends App {
 
   val workers = system.actorOf(BalancingPool(5).props(Props[ArticleParseActor]), "workers")
 
-  ClusterReceptionistExtension(system).registerService(workers)
+  ClusterClientReceptionist(system).registerService(workers)
 }
 

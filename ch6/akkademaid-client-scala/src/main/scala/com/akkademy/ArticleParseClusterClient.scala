@@ -1,7 +1,7 @@
 package com.akkademy
 
-import akka.actor.{ActorSelection, ActorSystem}
-import akka.contrib.pattern.ClusterClient
+import akka.actor.{ActorPath, ActorSystem}
+import akka.cluster.client.{ClusterClient, ClusterClientSettings}
 import akka.pattern.Patterns
 import akka.util.Timeout
 
@@ -15,13 +15,15 @@ object ArticleParseClusterClient {
     val timeout = new Timeout(Duration.create(5, "seconds"))
     val system = ActorSystem.create("clientSystem")
 
-    val initialContacts: Set[ActorSelection] = Set(
-      system.actorSelection("akka.tcp://Akkademy@127.0.0.1:2552/user/receptionist"),
-      system.actorSelection("akka.tcp://Akkademy@127.0.0.1:2551/user/receptionist")
-    )
 
-    import collection.JavaConversions._
-    val receptionist = system.actorOf(ClusterClient.defaultProps(initialContacts))
+    val initialContacts = Set(
+      ActorPath.fromString("akka.tcp://Akkademy@127.0.0.1:2552/user/receptionist"),
+      ActorPath.fromString("akka.tcp://Akkademy@127.0.0.1:2551/user/receptionist"))
+    val settings = ClusterClientSettings(system)
+      .withInitialContacts(initialContacts)
+
+    val receptionist = system.actorOf(ClusterClient.props(settings), "client")
+
     val msg = ClusterClient.Send("/user/workers", articleToParse, false)
 
     val f = Patterns.ask(receptionist, msg, timeout)

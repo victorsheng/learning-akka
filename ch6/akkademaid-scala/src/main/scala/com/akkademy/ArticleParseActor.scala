@@ -1,7 +1,6 @@
 package com.akkademy
 
 import akka.actor.Actor
-import com.akkademy.ParseArticle
 
 class ArticleParseActor extends Actor{
   override def receive: Receive = {
