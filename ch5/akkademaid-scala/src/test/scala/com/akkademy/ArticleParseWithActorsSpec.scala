@@ -16,16 +16,16 @@ class ArticleParseWithActorsSpec extends FlatSpec with Matchers {
       Props.create(classOf[ArticleParseActor]).
         withDispatcher("my-dispatcher").
         withRouter(new RoundRobinPool(8)), "workerRouter")
-  val future: Future[Int] = Future{
+  val future: Future[Int] = Future {
     1
   }(system.dispatcher)
 
   "ArticleParseActor" should "do work concurrently" in {
 
     val p = Promise[String]()
-
+    //作为一个线索,传递进actor
     val cameoActor: ActorRef =
-    system.actorOf(Props(new TestCameoActor(p)))
+      system.actorOf(Props(new TestCameoActor(p)))
 
     (0 to 2000).foreach(x => {
       workerRouter.tell(
@@ -33,6 +33,7 @@ class ArticleParseWithActorsSpec extends FlatSpec with Matchers {
         , cameoActor);
     })
 
+    //等20s,查看结果
     TestHelper.profile(() => Await.ready(p.future, 20 seconds), "Actors")
   }
 }

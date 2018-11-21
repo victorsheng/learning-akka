@@ -9,6 +9,7 @@ class ArticleParseWithFuturesSpec extends FlatSpec with Matchers {
 
   "ArticleParser" should "do work concurrently with futures" in {
     val futures = (1 to 2000).map(x => {
+      //简单明了
       Future(ArticleParser.apply(TestHelper.file))
     })
 
